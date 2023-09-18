@@ -1,0 +1,26 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t nakrex/node-sample-project .
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push nakrex/node-sample-project-server:latest
+
+      - name: Deploy to production (replace with your deployment steps)
+        run: |
+          # Add deployment steps here, e.g., deploying to a server or a cloud platform
